@@ -31,20 +31,16 @@ def compute_cost(A2, Y):
     return cost
 
 def backward_propagation(parameters, cache, X, Y):
-    m = X.shape[1]
-
     A1 = cache["A1"]
     A2 = cache["A2"]
 
     W2 = parameters["W2"]
-
     dZ2 = A2 - Y
-    dW2 = 1/m * np.dot(dZ2, A1.T)
-    db2 = 1/m * np.sum(dZ2, axis=1, keepdims=True)
-
-    dZ1 = np.dot(W2.T, dZ2) * (1 - np.power(A1, 2))
-    dW1 = 1/m * np.dot(dZ1, X.T)
-    db1 = 1/m * np.sum(dZ1, axis=1, keepdims=True)
+    dW2 = np.dot(dZ2, A1.T)/m
+    db2 = np.sum(dZ2, axis=1, keepdims=True)/m
+    dZ1 = np.multiply(np.dot(W2.T, dZ2), 1 - np.power(A1, 2))
+    dW1 = np.dot(dZ1, X.T)/m
+    db1 = np.sum(dZ1, axis=1, keepdims=True)/m
 
     grads = {"dW1": dW1, "db1": db1, "dW2": dW2, "db2": db2}
     return grads
@@ -84,8 +80,14 @@ def model(X, Y, n_h, num_iterations, learning_rate=1.2, print_cost=False):
 
 def predict(X, parameters):
     A2, cache = forward_propagation(X, parameters)
-    predictions = np.round(A2)
-    return predictions
+    yhat = A2
+    yhat = np.squeeze(yhat)
+    if yhat >= 0.5:
+        y_predict = 1
+    else:
+        y_predict = 0
+    return y_predict
+    
 
 
 np.random.seed(2)
