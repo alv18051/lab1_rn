@@ -10,3 +10,5 @@ En resumen, la inicialización aleatoria es preferible y fundamental para el bue
 En el código proporcionado, el learning rate se establece en 0.3. Si se cambia el learning rate a valores más bajos, como 0.01, el proceso de aprendizaje será más lento, ya que se realiza un ajuste más pequeño a los parámetros en cada iteración. Por lo tanto, se necesitarán más iteraciones para alcanzar la convergencia. Por otro lado, si se establece un learning rate más alto, como 0.5, el proceso de aprendizaje puede ser más rápido, pero existe el riesgo de que la función de costo oscile o diverja, lo que dificultaría alcanzar una solución óptima.
 
 Para obtener un buen equilibrio entre velocidad de aprendizaje y estabilidad, es común realizar pruebas con diferentes valores de learning rate y observar cómo afectan la convergencia del modelo y la función de costo. Un enfoque común es comenzar con un valor moderado de learning rate y luego ajustarlo según sea necesario para obtener resultados óptimos.
+
+3. La diferencia radica en la forma que se mide el error, en este caso con el MSE se presenta más preciso.

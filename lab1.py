@@ -18,7 +18,7 @@ def initialize_parameters(n_x, n_h, n_y):
         "b2" : b2
     }
     return parameters
-
+'''
 def forward_prop(X, parameters):
     W1 = parameters["W1"]
     b1 = parameters["b1"]
@@ -35,12 +35,20 @@ def forward_prop(X, parameters):
         "A2": A2
     }
     return A2, cache
-
+'''
 
 #Con MSE
-'''
+
 def forward_prop(X, parameters):
-    # ... (sin cambios en el código)
+    W1 = parameters["W1"]
+    b1 = parameters["b1"]
+    W2 = parameters["W2"]
+    b2 = parameters["b2"]
+
+    Z1 = np.dot(W1, X) + b1
+    A1 = np.tanh(Z1)
+    Z2 = np.dot(W2, A1) + b2
+    A2 = sigmoid(Z2)
 
     # Cambio: Usamos la nueva función de costo MSE
     cost = calculate_cost_mse(A2, Y)
@@ -51,7 +59,7 @@ def forward_prop(X, parameters):
         "cost": cost  # Agregamos el costo al caché para usarlo en backward_prop
     }
     return A2, cache
-'''
+
 
 
 def calculate_cost(A2, Y):
@@ -64,7 +72,7 @@ def compute_cost(A2, Y):
     m = Y.shape[1]
     cost = -1/m * np.sum(Y * np.log(A2) + (1 - Y) * np.log(1 - A2))
     return cost
-
+'''
 def backward_prop(X, Y, cache, parameters):
     A1 = cache["A1"]
     A2 = cache["A2"]
@@ -86,11 +94,14 @@ def backward_prop(X, Y, cache, parameters):
     }
 
     return grads
-
-#Con MSE
 '''
+#Con MSE
+
 def backward_prop(X, Y, cache, parameters):
-    # ... (sin cambios en el código)
+    A1 = cache["A1"]
+    A2 = cache["A2"]
+
+    W2 = parameters["W2"]
 
     # Cambio: Calculamos el gradiente para MSE en lugar de la entropía cruzada
     dZ2 = A2 - Y
@@ -108,7 +119,7 @@ def backward_prop(X, Y, cache, parameters):
     }
 
     return grads
-'''
+
 
 
 def update_parameters(parameters, grads, learning_rate):
@@ -135,6 +146,7 @@ def update_parameters(parameters, grads, learning_rate):
     }
 
     return new_parameters
+'''
 def model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate):
     parameters = initialize_parameters(n_x, n_h, n_y)
 
@@ -151,11 +163,11 @@ def model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate):
             print('Cost after iteration# {:d}: {:f}'.format(i, cost))
 
     return parameters
-
-#Con MSE
 '''
+#Con MSE
+
 def model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate):
-    # ... (sin cambios en el código)
+    parameters = initialize_parameters(n_x, n_h, n_y)
 
     for i in range(0, num_of_iters+1):
         a2, cache = forward_prop(X, parameters)
@@ -171,7 +183,7 @@ def model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate):
             print('Cost after iteration# {:d}: {:f}'.format(i, cost))
 
     return parameters
-'''
+
 
 
 def predict(X, parameters):
