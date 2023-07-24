@@ -36,6 +36,24 @@ def forward_prop(X, parameters):
     }
     return A2, cache
 
+
+#Con MSE
+'''
+def forward_prop(X, parameters):
+    # ... (sin cambios en el código)
+
+    # Cambio: Usamos la nueva función de costo MSE
+    cost = calculate_cost_mse(A2, Y)
+
+    cache = {
+        "A1": A1,
+        "A2": A2,
+        "cost": cost  # Agregamos el costo al caché para usarlo en backward_prop
+    }
+    return A2, cache
+'''
+
+
 def calculate_cost(A2, Y):
     cost = -np.sum(np.multiply(Y, np.log(A2)) +  np.multiply(1-Y, np.log(1-A2)))/m
     cost = np.squeeze(cost)
@@ -68,6 +86,30 @@ def backward_prop(X, Y, cache, parameters):
     }
 
     return grads
+
+#Con MSE
+'''
+def backward_prop(X, Y, cache, parameters):
+    # ... (sin cambios en el código)
+
+    # Cambio: Calculamos el gradiente para MSE en lugar de la entropía cruzada
+    dZ2 = A2 - Y
+    dW2 = np.dot(dZ2, A1.T)/m
+    db2 = np.sum(dZ2, axis=1, keepdims=True)/m
+    dZ1 = np.multiply(np.dot(W2.T, dZ2), 1-np.power(A1, 2))
+    dW1 = np.dot(dZ1, X.T)/m
+    db1 = np.sum(dZ1, axis=1, keepdims=True)/m
+
+    grads = {
+        "dW1": dW1,
+        "db1": db1,
+        "dW2": dW2,
+        "db2": db2
+    }
+
+    return grads
+'''
+
 
 def update_parameters(parameters, grads, learning_rate):
     W1 = parameters["W1"]
@@ -110,6 +152,28 @@ def model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate):
 
     return parameters
 
+#Con MSE
+'''
+def model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate):
+    # ... (sin cambios en el código)
+
+    for i in range(0, num_of_iters+1):
+        a2, cache = forward_prop(X, parameters)
+
+        # Cambio: Ahora obtenemos el costo del caché
+        cost = cache["cost"]
+
+        grads = backward_prop(X, Y, cache, parameters)
+
+        parameters = update_parameters(parameters, grads, learning_rate)
+
+        if(i % 100 == 0):
+            print('Cost after iteration# {:d}: {:f}'.format(i, cost))
+
+    return parameters
+'''
+
+
 def predict(X, parameters):
     a2, cache = forward_prop(X, parameters)
     yhat = a2
@@ -121,6 +185,10 @@ def predict(X, parameters):
 
     return y_predict
     
+def calculate_cost_mse(A2, Y):
+    m = Y.shape[1]
+    cost = 1/(2*m) * np.sum(np.square(A2 - Y))
+    return cost
 
 
 np.random.seed(2)
